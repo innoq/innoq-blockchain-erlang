@@ -7,7 +7,7 @@ init(Req, Opts) ->
   {cowboy_loop, Req, rumpelstielzchen}.
 
 info(_Msg, Req, State) ->
-  BlockHeight = erl_sals_chain_keeper:get_index_of_last_block(),
+  BlockHeight = integer_to_binary(erl_sals_chain_keeper:get_index_of_last_block()),
   Blocks = erl_sals_chain_keeper:get_list_of_blocks(),
   Output = ["{blocks:[", Blocks, "],blockHeight:", BlockHeight, "}"],
   Req2 = cowboy_req:reply(200,

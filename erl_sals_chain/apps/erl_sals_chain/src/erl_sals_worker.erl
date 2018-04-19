@@ -14,7 +14,7 @@ mine(Index, Timestamp, TransactionJson, PreviousBlockHash) ->
                  ),
     BlockGenerator = fun (I) -> [BeforeProof, io_lib:write(I), PostProof] end,
     Proof = find_block_hashing_with_6_leading_zeros(BlockGenerator),
-    BlockGenerator(Proof).    
+    {Proof, BlockGenerator(Proof)}.
 
 % BlockGenerator is a function expecting one integer argument
 % and producing an IOlist to hash.
