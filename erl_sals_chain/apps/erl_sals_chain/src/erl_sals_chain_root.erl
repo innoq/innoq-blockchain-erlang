@@ -7,8 +7,9 @@ init(Req, Opts) ->
     {cowboy_loop, Req, rumpelstielzchen}.
 
 info(_Msg, Req, State) ->
-    Uuid = list_to_binary(uuid:uuid_to_string(uuid:get_v4())),
-    Doc = {[{nodeId,Uuid}, {currentBlockHeight,1}]},
+    Uuid = erl_sals_chain_uuid:get_uuid(),
+    BlockHeight = erl_sals_chain_keeper:get_index_of_last_block(),
+    Doc = {[{nodeId, Uuid}, {currentBlockHeight, BlockHeight}]},
     Json = jiffy:encode(Doc),
     Req2 = cowboy_req:reply(200,
         [{<<"content-type">>, <<"application/json">>}],
