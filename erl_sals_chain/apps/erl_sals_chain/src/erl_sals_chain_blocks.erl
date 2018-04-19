@@ -25,3 +25,28 @@ info(_Msg, Req, State) ->
     Req),
   {shutdown, Req2, State}.
 
+candidate_block(PreviousBlock) ->
+  {[{index, get_index_from_block(PreviousBlock) + 1},
+    {timestamp, os:system_time()},
+    {proof, 0},
+    {transactions, []},
+    {previousBlockHash, hash(PreviousBlock)}]}.
+
+next_proof({[
+  {index, Index},
+  {timestamp, Timestamp},
+  {proof, Proof},
+  {transactions, Transactions},
+  {previousBlockHash, PreviousBlockHash}
+    ]}) ->
+  {[
+    {index, Index},
+    {timestamp, Timestamp},
+    {proof, Proof + 1},
+    {transactions, Transactions},
+    {previousBlockHash, PreviousBlockHash}
+  ]}.
+
+get_index_from_block({[{index, Index} | _]}) -> Index.
+
+hash(Block) -> <<"asdf">>. % crypto:hash(sha256,jiffy.encode(Block)).
