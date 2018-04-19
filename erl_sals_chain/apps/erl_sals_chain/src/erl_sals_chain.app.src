@@ -5,7 +5,8 @@
   {mod, { erl_sals_chain_app, []}},
   {applications,
    [kernel,
-    stdlib
+    stdlib,
+    cowboy
    ]},
   {env,[]},
   {modules, []},
