@@ -1,9 +1,15 @@
-erl_sals_chain
-=====
+# erl_sals_chain
 
-An OTP application
+Block chain simulation, hacked at INNOQ event 2018-04-19.
 
-Build
------
+## Prerequisits
 
-    $ rebar3 compile
+Install Erlang OTP and [rebar3](https://github.com/erlang/rebar3).
+
+## Build
+
+    rebar3 compile
+
+## Run
+
+   rebar3 run
