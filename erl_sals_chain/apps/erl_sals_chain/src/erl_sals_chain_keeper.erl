@@ -27,7 +27,7 @@ start_link() ->
 init(_Arg) ->
     GenesisBlock = <<"{\"index\":1,\"timestamp\":0,\"proof\":1917336,\"transactions\":[{\"id\":\"b3c973e2-db05-4eb5-9668-3e81c7389a6d\",\"timestamp\":0,\"payload\":\"I am Heribert Innoq\"}],\"previousBlockHash\":\"0\"}">>,
     Blocks = [ GenesisBlock ],
-    PreviousHash = hex_digits(crypto:hash(sha256, GenesisBlock), []),
+    PreviousHash = erl_sals_hex_utils:hex_digits(crypto:hash(sha256, GenesisBlock)),
     PreviousIndex = 1,
     State = {PreviousHash, PreviousIndex, Blocks},
     {ok, State}.
@@ -39,21 +39,7 @@ handle_call(get_hash_of_last_block, _From, {PreviousHash, PreviousIndex, Blocks}
 handle_call(get_list_of_blocks, _From, {PreviousHash, PreviousIndex, Blocks}) ->
     {reply, Blocks, {PreviousHash, PreviousIndex, Blocks}};
 handle_call({put_new_block, Block}, _From, {_PreviousHash, PreviousIndex, Blocks}) ->
-    {reply, ok, {hex_digits(crypto:hash(sha256, Block), []), PreviousIndex + 1, Blocks ++ [Block]}}. 
+    {reply, ok, {erl_sals_hex_utils:hex_digits(crypto:hash(sha256, Block)), PreviousIndex + 1, Blocks ++ [Block]}}.
 
 handle_cast(_Request, State) ->
     {stop, nicht_vorgesehen, State}.
-
-one_hex_digit(D) when 0 =< D, D =< 9 ->
-    $0 + D;
-one_hex_digit(D) when 10 =< D, D =< 15 ->
-    $a + D - 10.
-
-hex_digits(<< >>, Acc) -> lists:reverse(Acc);
-hex_digits(<<First:8, Rest/binary>>, Acc) ->
-    hex_digits(Rest, [one_hex_digit(First rem 16), one_hex_digit(First div 16) | Acc]).
-
-
-                
-    
-    
