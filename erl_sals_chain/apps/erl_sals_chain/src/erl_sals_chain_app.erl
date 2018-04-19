@@ -19,7 +19,9 @@ start(_StartType, _StartArgs) ->
     Routes = [ {
         '_',
         [
-            {"/", erl_sals_chain_root, []}
+            {"/", erl_sals_chain_root, []},
+            {"/blocks", erl_sals_chain_blocks, []},
+            {"/mine", erl_sals_chain_mine, []}
         ]
     } ],
     Dispatch = cowboy_router:compile(Routes),

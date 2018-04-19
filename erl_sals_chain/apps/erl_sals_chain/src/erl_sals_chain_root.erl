@@ -7,9 +7,12 @@ init(Req, Opts) ->
     {cowboy_loop, Req, rumpelstielzchen}.
 
 info(_Msg, Req, State) ->
+    Uuid = <<"asf">>,
+    Doc = {[{nodeId,Uuid}, {currentBlockHeight,1}]},
+    Json = jiffy:encode(Doc),
     Req2 = cowboy_req:reply(200,
-        [{<<"content-type">>, <<"text/plain">>}],
-        <<"Hello Heribert!">>,
+        [{<<"content-type">>, <<"application/json">>}],
+        Json,
         Req),
     {shutdown, Req2, State}.
 
