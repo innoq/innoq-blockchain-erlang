@@ -1,0 +1,6 @@
+-sname erl_sals_chain
+
+-setcookie erl_sals_chain_cookie
+
++K true
++A30
