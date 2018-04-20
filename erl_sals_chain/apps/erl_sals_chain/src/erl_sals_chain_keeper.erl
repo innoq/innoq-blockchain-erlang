@@ -26,7 +26,14 @@ put_new_block(Block) ->
     gen_server:call(erl_sals_chain_keeper, {put_new_block, Block}).
 
 confirmed_transaction(TransactionId) ->
-    gen_server:call(erl_sals_chain_keeper, {confirmed, TransactionId}).
+    case find_transaction(TransactionId) of
+        {not_found} -> false;
+        {ok, _} -> true
+    end.
+
+% Gives back {ok, Transaction} or {not_found}.
+find_transaction(TransactionId) ->
+    {not_found}.
 
 start_link() ->
     gen_server:start_link({local, erl_sals_chain_keeper}, erl_sals_chain_keeper, ignore_me, []).
