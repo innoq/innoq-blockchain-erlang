@@ -1,19 +1,20 @@
 {application, erl_sals_chain,
- [{description, "An OTP application"},
-  {vsn, "0.1.0"},
-  {registered, []},
-  {mod, { erl_sals_chain_app, []}},
-  {applications,
-   [kernel,
-    stdlib,
-    cowboy,
-    jiffy,
-    uuid
-   ]},
-  {env,[]},
-  {modules, []},
+    [{description, "An OTP application"},
+        {vsn, "0.1.0"},
+        {registered, []},
+        {mod, {erl_sals_chain_app, []}},
+        {applications,
+            [kernel,
+                stdlib,
+                cowboy,
+                jiffy,
+                uuid,
+                shotgun
+            ]},
+        {env, []},
+        {modules, []},
 
-  {maintainers, []},
-  {licenses, ["Apache 2.0"]},
-  {links, []}
- ]}.
+        {maintainers, []},
+        {licenses, ["Apache 2.0"]},
+        {links, []}
+    ]}.
