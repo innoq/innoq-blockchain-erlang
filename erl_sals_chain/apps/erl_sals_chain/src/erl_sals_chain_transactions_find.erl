@@ -31,7 +31,7 @@ info(_Msg, Req, State) ->
           end,
     Json = jiffy:encode(Doc),
     Req2 = cowboy_req:reply(200,
-        [{<<"content-type">>, <<"application/json">>}],
+        #{<<"content-type">> => <<"application/json">>},
         Json,
         Req),
-    {shutdown, Req2, State}.
+    {stop, Req2, State}.

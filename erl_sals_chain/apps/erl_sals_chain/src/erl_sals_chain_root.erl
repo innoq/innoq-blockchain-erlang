@@ -12,8 +12,8 @@ info(_Msg, Req, State) ->
     Doc = {[{nodeId, Uuid}, {currentBlockHeight, BlockHeight}]},
     Json = jiffy:encode(Doc),
     Req2 = cowboy_req:reply(200,
-        [{<<"content-type">>, <<"application/json">>}],
-        Json,
-        Req),
-    {shutdown, Req2, State}.
+                            #{<<"content-type">> => <<"application/json">>},
+                            Json,
+                            Req),
+    {stop, Req2, State}.
 

@@ -26,11 +26,10 @@ info(_Msg, Req, State) ->
             Doc = ["Heribert uses POST here, too."]
     end,
     Req2 = cowboy_req:reply(200,
-        [{<<"content-type">>, <<"application/json">>}],
+        #{<<"content-type">> => <<"application/json">>},
         Doc,
         Req),
-    {shutdown, Req2, State}.
-
+    {stop, Req2, State}.
 
 get_node_id(Host, Port) ->
     {ok, Conn} = shotgun:open(Host, Port),
