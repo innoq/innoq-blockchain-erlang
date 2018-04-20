@@ -17,9 +17,9 @@ info(_Msg, Req, State) ->
   erl_sals_chain_keeper:put_new_block(NextBlock),
   Json = [
     <<"{\"message\":\"Mined a new block in ">>,
-    float_to_binary(Duration),
+    list_to_binary(float_to_list(Duration,[{decimals,3},compact])),
     <<"s. Hashing power: ">>,
-    float_to_binary(HashingPower),
+    list_to_binary(float_to_list(HashingPower,[{decimals,3},compact])),
     <<"x hashes/s\",\"block\":">>,
     NextBlock,
     <<"}">>
