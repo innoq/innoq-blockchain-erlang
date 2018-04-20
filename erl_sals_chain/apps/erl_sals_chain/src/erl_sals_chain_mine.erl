@@ -22,7 +22,7 @@ info(_Msg, Req, State) ->
     Duration = (TimestampAfter - Timestamp) / 1000,
     HashingPower = Proof / Duration,
     Req2 =
-        case erl_sals_chain_keeper:put_new_block(#block{content = NextBlockContent, transactions = []}) of
+        case erl_sals_chain_keeper:put_new_block(#block{content = NextBlockContent, transactions = Transactions}) of
             ok ->
                 Json = [
                         <<"{\"message\":\"Mined a new block in ">>,

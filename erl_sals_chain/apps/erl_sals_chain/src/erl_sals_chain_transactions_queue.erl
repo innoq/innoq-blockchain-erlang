@@ -18,7 +18,7 @@ pop_five_transactions() ->
 find_transaction(TransactionId) ->
     gen_server:call(erl_sals_chain_transactions_queue, {find_transaction, TransactionId}).
 
-put_new_transaction(Transaction) ->
+put_new_transaction(Transaction) when is_record(Transaction, transaction) ->
     gen_server:call(erl_sals_chain_transactions_queue, {put_new_transaction, Transaction}).
 
 start_link() ->
@@ -41,7 +41,7 @@ handle_call(pop_five_transactions, _From, State) ->
 handle_call({find_transaction, TransactionId}, _From, State) ->
     {reply, find(State, TransactionId), State};
 
-handle_call({put_new_transaction, Transaction}, _From, State) ->
+handle_call({put_new_transaction, Transaction}, _From, State) when is_record(Transaction, transaction) ->
     {reply, ok, State ++ [Transaction]}.
 
 handle_cast(_Request, State) ->
