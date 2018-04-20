@@ -2,7 +2,7 @@
 -include("erl_sals_records.hrl").
 -export([init/2, info/3]).
 
-init(Req, Opts) ->
+init(Req, _Opts) ->
     self() ! handle_request,
     {cowboy_loop, Req, rumpelstielzchen}.
 
