@@ -3,8 +3,8 @@
 -export([init/2, info/3]).
 
 init(Req, _Opts) ->
-  self() ! handle_request,
-  {cowboy_loop, Req, rumpelstielzchen}.
+    self() ! handle_request,
+    {cowboy_loop, Req, rumpelstielzchen}.
 
 info(_Msg, Req, State) ->
     BlockHeight = integer_to_binary(erl_sals_chain_keeper:get_index_of_last_block()),
