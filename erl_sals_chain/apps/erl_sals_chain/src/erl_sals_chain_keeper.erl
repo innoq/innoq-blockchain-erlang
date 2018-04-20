@@ -70,6 +70,9 @@ handle_call(get_hash_of_last_block, _From, {PreviousHash, PreviousIndex, Blocks,
 handle_call(get_list_of_blocks, _From, {PreviousHash, PreviousIndex, Blocks, TransactionId2Transaction}) ->
     {reply, Blocks, {PreviousHash, PreviousIndex, Blocks, TransactionId2Transaction}};
 handle_call({put_new_block, Block}, _From, {_PreviousHash, PreviousIndex, Blocks, TransactionId2Transaction}) ->
+    Checks = [
+              [fun () -> is_list(Transactions) end, <<"Internal error: Transactions isn't a list.">>],
+             ],
     {reply, ok, {erl_sals_hex_utils:hex_digits(crypto:hash(sha256, Block#block.content)),
                  PreviousIndex + 1,
                  Blocks ++ [Block],
