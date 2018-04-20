@@ -10,6 +10,7 @@ init(Req, _Opts) ->
 
 info(_Msg, Req, State) ->
     Id = cowboy_req:binding(id, Req),
+    io:write(io:format("~p~n", [Id])),
     Doc = case erl_sals_chain_keeper:find_transaction(Id) of
               {ok, Transaction} -> {[
                   {id, Transaction#transaction.id},
