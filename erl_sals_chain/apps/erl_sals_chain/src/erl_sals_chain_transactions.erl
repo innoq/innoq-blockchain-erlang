@@ -12,7 +12,7 @@ info(_Msg, Req, State) ->
     Method = cowboy_req:method(Req),
     case Method of
         <<"POST">> ->
-            {ok, Body, _} = cowboy_req:body(Req),
+            {ok, Body, _} = cowboy_req:read_body(Req),
             {[{<<"payload">>, Payload}]} = jiffy:decode(Body),
             Transaction = create_transaction(Payload),
             erl_sals_chain_transactions_queue:put_new_transaction(Transaction),
@@ -26,10 +26,10 @@ info(_Msg, Req, State) ->
             Doc = ["Heribert uses POST here."]
     end,
     Req2 = cowboy_req:reply(200,
-        [{<<"content-type">>, <<"application/json">>}],
+        #{<<"content-type">> => <<"application/json">>},
         Doc,
         Req),
-    {shutdown, Req2, State}.
+    {stop, Req2, State}.
 
 create_transaction(Payload) ->
     Id = list_to_binary(uuid:uuid_to_string(uuid:get_v4())),

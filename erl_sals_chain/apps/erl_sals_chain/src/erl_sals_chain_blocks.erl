@@ -14,7 +14,7 @@ info(_Msg, Req, State) ->
     BlockContentsWithCommas = lists:join(<<",">>, BlockContents),
     Output = [<<"{\"blocks\":[">>, BlockContentsWithCommas, <<"],\"blockHeight\":">>, BlockHeight, "}"],
     Req2 = cowboy_req:reply(200,
-                            [{<<"content-type">>, <<"application/json">>}],
+                            #{<<"content-type">> => <<"application/json">>},
                             Output,
                             Req),
-    {shutdown, Req2, State}.
+    {stop, Req2, State}.

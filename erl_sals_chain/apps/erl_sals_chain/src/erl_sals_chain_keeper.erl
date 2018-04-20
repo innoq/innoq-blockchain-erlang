@@ -28,11 +28,11 @@ put_new_block(Block) ->
     gen_server:call(erl_sals_chain_keeper, {put_new_block, Block}).
 
 % returns ok or {invalid, Reason}, where "Reason" is an IOlist.
-replace_chain(SortedListOfBlocks) ->
+replace_chain(_SortedListOfBlocks) ->
     {invalid, <<"Not yet implemented">>}.
 
 % returns ok or {invalid, Reason}, where "Reason" is an IOlist.
-replace_chain_from_JSON(JsonIoList) ->
+replace_chain_from_JSON(_JsonIoList) ->
     {invalid, <<"Not yet implemented">>}.
 
 confirmed_transaction(TransactionId) ->
@@ -70,11 +70,10 @@ handle_call(get_hash_of_last_block, _From, {PreviousHash, PreviousIndex, Blocks,
 handle_call(get_list_of_blocks, _From, {PreviousHash, PreviousIndex, Blocks, TransactionId2Transaction}) ->
     {reply, Blocks, {PreviousHash, PreviousIndex, Blocks, TransactionId2Transaction}};
 handle_call({put_new_block, Block}, _From, {_PreviousHash, PreviousIndex, Blocks, TransactionId2Transaction}) ->
-    #block{content = Content, transactions = Transactions} = Block,
-    {reply, ok, {erl_sals_hex_utils:hex_digits(crypto:hash(sha256, Content)),
+    {reply, ok, {erl_sals_hex_utils:hex_digits(crypto:hash(sha256, Block#block.content)),
                  PreviousIndex + 1,
                  Blocks ++ [Block],
-                 add_transactions_to_map(Transactions, TransactionId2Transaction)
+                 add_transactions_to_map(Block#block.transactions, TransactionId2Transaction)
                 }};
 handle_call({find_transaction, TransactionId}, _From, {PreviousHash, PreviousIndex, Blocks, TransactionId2Transaction}) ->
     Result = 
@@ -91,6 +90,11 @@ handle_cast(_Request, State) ->
 add_transactions_to_map([], TransactionId2Transaction) ->
     TransactionId2Transaction;
 add_transactions_to_map([Transaction | Rest], TransactionId2Transaction) ->
-    #transaction{id = Id, payload = _, timestamp = _} = Transaction,
-    add_transactions_to_map(Rest, TransactionId2Transaction#{Id => Transaction}).
-    
+    Id = Transaction#transaction.id,
+    CleanId =
+        if
+            is_binary(Id) -> Id;
+            true -> erlang:error(<<"Transaction id isn't binary">>)
+        end,
+    add_transactions_to_map(Rest, TransactionId2Transaction#{CleanId => Transaction}).
+
