@@ -21,20 +21,26 @@ info(_Msg, Req, State) ->
     TimestampAfter = os:system_time(millisecond),
     Duration = (TimestampAfter - Timestamp) / 1000,
     HashingPower = Proof / Duration,
-    erl_sals_chain_keeper:put_new_block(#block{content = NextBlockContent, transactions = []}),
-    Json = [
-        <<"{\"message\":\"Mined a new block in ">>,
-        list_to_binary(float_to_list(Duration, [{decimals, 3}, compact])),
-        <<"s. Hashing power: ">>,
-        list_to_binary(float_to_list(HashingPower, [{decimals, 3}, compact])),
-        <<"x hashes/s\",\"block\":">>,
-        NextBlockContent,
-        <<"}">>
-    ],
-    Req2 = cowboy_req:reply(200,
-        [{<<"content-type">>, <<"application/json">>}],
-        Json,
-        Req),
+    Req2 =
+        case erl_sals_chain_keeper:put_new_block(#block{content = NextBlockContent, transactions = []}) of
+            ok ->
+                Json = [
+                        <<"{\"message\":\"Mined a new block in ">>,
+                        list_to_binary(float_to_list(Duration, [{decimals, 3}, compact])),
+                        <<"s. Hashing power: ">>,
+                        list_to_binary(float_to_list(HashingPower, [{decimals, 3}, compact])),
+                        <<"x hashes/s\",\"block\":">>,
+                        NextBlockContent,
+                        <<"}">>
+                       ],
+                cowboy_req:reply(200,
+                                 [{<<"content-type">>, <<"application/json">>}],
+                                 Json,
+                                 Req);
+            {invalid, Reason} ->
+                Json = [ <<"{\"failure\":\"Failed to mine a new block.\",\"reason\":\"">>, Reason,<<"\"}">> ],
+                cowboy_req:reply(500, [{<<"content-type">>, <<"application/json">>}], Json, Req)
+        end,
     {shutdown, Req2, State}.
 
 
