@@ -14,15 +14,20 @@ info(_Msg, Req, State) ->
         <<"POST">> ->
             {ok, Body, _} = cowboy_req:body(Req),
             {[{<<"host">>, Host}]} = jiffy:decode(Body),
-
+            io:write(io:format("~p~n",[Host])),
+            [_ , _ , HostNoProtocol] = string:replace(Host, "http://", ""),
+            [Hostname, Port] = string:split(HostNoProtocol, ":"),
+            NodeId = get_node_id(<<Hostname>>, binary_to_integer(Port)),
+            Node = {[
+                {nodeId, NodeId},
+                {host, Host}
+            ]},
+            erl_sals_chain_nodes_keeper:put_new_node(Node),
             Doc = jiffy:encode({[
                 {message, <<"New node added">>},
-                {node, {[
-                    {nodeId, <<"some id">>},
-                    {host, Host}
-                ]}}
+                {node, Node}
             ]});
-        _ -> 
+        _ ->
             Doc = ["Heribert uses POST here, too."]
     end,
     Req2 = cowboy_req:reply(200,
@@ -32,11 +37,14 @@ info(_Msg, Req, State) ->
     {shutdown, Req2, State}.
 
 
-get_node_id(Host, Port) ->
-    {ok, Conn} = shotgun:open(Host, Port),
+get_node_id(Hostname, Port) ->
+    io:write(io:format("~p~n",[Hostname])),
+    io:write(io:format("~p~n",[Port])),
+    {ok, Conn} = shotgun:open(Hostname, Port),
     {ok, Response} = shotgun:get(Conn, "/"),
     #{body := Body} = Response,
     Json = jiffy:decode(Body),
+    io:write(io:format("~p~n",[Json])),
     {[{<<"nodeId">>, NodeId}]} = Json,
     shotgun:close(Conn),
     NodeId.
