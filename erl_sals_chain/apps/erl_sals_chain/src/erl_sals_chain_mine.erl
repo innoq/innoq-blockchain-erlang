@@ -13,7 +13,7 @@ info(_Msg, Req, State) ->
     Index = erl_sals_chain_keeper:get_index_of_last_block() + 1,
     PreviousBlockHash = erl_sals_chain_keeper:get_hash_of_last_block(),
     Transactions = erl_sals_chain_transactions_queue:pop_five_transactions(),
-    TransactionsJson = jiffy:encode([Transactions]),
+    TransactionsJson = jiffy:encode(lists:map(fun to_json/1,Transactions)),
     {Proof, NextBlockContent} = erl_sals_worker:mine(Index,
         TimestampInSeconds,
         TransactionsJson,
@@ -38,3 +38,9 @@ info(_Msg, Req, State) ->
     {shutdown, Req2, State}.
 
 
+to_json(Transaction) ->
+    {[
+        {id, Transaction#transaction.id},
+        {payload, Transaction#transaction.payload},
+        {timestamp, Transaction#transaction.timestamp}
+    ]}.
