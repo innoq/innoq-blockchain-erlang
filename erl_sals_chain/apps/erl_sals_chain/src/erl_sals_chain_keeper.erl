@@ -6,7 +6,7 @@
 
 % API:
 -export([get_index_of_last_block/0, get_hash_of_last_block/0, get_list_of_blocks/0,
-         put_new_block/1, confirmed_transaction/1, find_transaction/1]).
+         put_new_block/1, confirmed_transaction/1, find_transaction/1, replace_chain/1]).
 
 % gen_server:
 -export([init/1, handle_call/3, handle_cast/2, start_link/0]).
@@ -24,6 +24,9 @@ get_list_of_blocks() ->
 
 put_new_block(Block) ->
     gen_server:call(erl_sals_chain_keeper, {put_new_block, Block}).
+
+replace_chain(SortedListOfBlocks) ->
+    ok.
 
 confirmed_transaction(TransactionId) ->
     case find_transaction(TransactionId) of
