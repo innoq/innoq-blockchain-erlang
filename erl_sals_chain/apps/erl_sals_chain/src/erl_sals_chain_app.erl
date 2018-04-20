@@ -22,7 +22,8 @@ start(_StartType, _StartArgs) ->
             {"/", erl_sals_chain_root, []},
             {"/blocks", erl_sals_chain_blocks, []},
             {"/mine", erl_sals_chain_mine, []},
-            {"/transactions", erl_sals_chain_transactions, []}
+            {"/transactions", erl_sals_chain_transactions, []},
+            {"/transactions/:id", erl_sals_chain_transactions_find, []}
         ]
     } ],
     Dispatch = cowboy_router:compile(Routes),
