@@ -39,10 +39,14 @@ init([]) ->
             id => erl_sals_chain_uuid,
             start => {erl_sals_chain_uuid, start_link, []}
           },
-            #{
-                id => erl_sals_chain_transactions_queue,
-                start => {erl_sals_chain_transactions_queue, start_link, []}
-            }
+          #{
+              id => erl_sals_chain_transactions_queue,
+              start => {erl_sals_chain_transactions_queue, start_link, []}
+          },
+          #{
+              id => erl_sals_chain_nodes_keeper,
+              start => {erl_sals_chain_nodes_keeper, start_link, []}
+          }
         ]
       }
     }.
