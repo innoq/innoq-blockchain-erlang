@@ -6,7 +6,8 @@
 
 % API:
 -export([get_index_of_last_block/0, get_hash_of_last_block/0, get_list_of_blocks/0,
-         put_new_block/1, confirmed_transaction/1, find_transaction/1]).
+         put_new_block/1, confirmed_transaction/1, find_transaction/1,
+         replace_chain/1, replace_chain_from_JSON/1]).
 
 % gen_server:
 -export([init/1, handle_call/3, handle_cast/2, start_link/0]).
@@ -22,8 +23,17 @@ get_hash_of_last_block() ->
 get_list_of_blocks() ->
     gen_server:call(erl_sals_chain_keeper, get_list_of_blocks).
 
+% returns ok or {invalid, Reason}, where "Reason" is an IOlist.
 put_new_block(Block) ->
     gen_server:call(erl_sals_chain_keeper, {put_new_block, Block}).
+
+% returns ok or {invalid, Reason}, where "Reason" is an IOlist.
+replace_chain(SortedListOfBlocks) ->
+    {invalid, <<"Not yet implemented">>}.
+
+% returns ok or {invalid, Reason}, where "Reason" is an IOlist.
+replace_chain_from_JSON(JsonIoList) ->
+    {invalid, <<"Not yet implemented">>}.
 
 confirmed_transaction(TransactionId) ->
     case find_transaction(TransactionId) of
