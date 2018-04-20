@@ -7,10 +7,7 @@
   {git,"git://github.com/ninenines/cowlib.git",
        {ref,"d544a494af4dbc810fc9c15eaf5cc050cced1501"}},
   1},
- {<<"jiffy">>,
-  {git,"https://github.com/davisp/jiffy.git",
-       {ref,"fe43b59f4f5e8aafb111f400a7e4f813cd134b55"}},
-  0},
+ {<<"jiffy">>,{pkg,<<"jiffy">>,<<"0.15.1">>},0},
  {<<"quickrand">>,{pkg,<<"quickrand">>,<<"1.7.3">>},1},
  {<<"ranch">>,
   {git,"git://github.com/ninenines/ranch.git",
@@ -19,6 +16,7 @@
  {<<"uuid">>,{pkg,<<"uuid_erl">>,<<"1.7.3">>},0}]}.
 [
 {pkg_hash,[
+ {<<"jiffy">>, <<"BE83B09388DA1A6C7E798207C9D6A1C4D71BB95FCC387D37D35861788F49AB97">>},
  {<<"quickrand">>, <<"0E4FB48FAC904FE0C6E21D7E8C31A288A0700E1E81A35B38B649FC119079755D">>},
  {<<"uuid">>, <<"C5DF97D1A3D626235C2415E74053C47B2138BB863C5CD802AB5CAECB8ECC019F">>}]}
 ].

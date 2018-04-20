@@ -32,13 +32,17 @@ init(_Arg) ->
     {ok, State}.
 
 handle_call(pop_five_transactions, _From, State) ->
-    {reply, lists:sublist(State, 5), lists:nthtail(State, 5)};
+    if length(State) =< 5 ->
+        {reply, lists:sublist(State, 5), []};
+    true -> 
+        {reply, lists:sublist(State, 5), lists:nthtail(5, State)}
+    end;
 
 handle_call({find_transaction, TransactionId}, _From, State) ->
     {reply, find(State, TransactionId), State};
 
 handle_call({put_new_transaction, Transaction}, _From, State) ->
-    {reply, ok, State ++ Transaction}.
+    {reply, ok, State ++ [Transaction]}.
 
 handle_cast(_Request, State) ->
     {stop, nicht_vorgesehen, State}.
