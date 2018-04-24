@@ -1,6 +1,6 @@
 # erl_sals_chain
 
-Block chain simulation, hacked at INNOQ event 2018-04-19.
+Block chain simulation, hacked at INNOQ event 2018-04-19/2018-04-20.
 
 ## Prerequisits
 
